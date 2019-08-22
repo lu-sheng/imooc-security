@@ -6,7 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="imooc-security" />
+        <module name="imooc-security-demo" />
+        <module name="imooc-security-app" />
+        <module name="imooc-security-core" />
+        <module name="imooc-security-browser" />
       </profile>
     </annotationProcessing>
   </component>
