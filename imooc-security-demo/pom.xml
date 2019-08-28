@@ -12,11 +12,13 @@
     <artifactId>imooc-security-demo</artifactId>
 
     <dependencies>
+        <!--依赖browser项目-->
         <dependency>
             <groupId>com.imooc.security</groupId>
             <artifactId>imooc-security-browser</artifactId>
             <version>${imooc.security.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -27,6 +29,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -44,6 +47,7 @@
                 </executions>
             </plugin>
         </plugins>
+
         <finalName>demo</finalName>
     </build>
 

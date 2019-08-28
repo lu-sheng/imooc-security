@@ -2,11 +2,14 @@ package com.imooc.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.imooc.dto.User;
-import org.junit.Test;
+import com.imooc.dto.UserQueryCondition;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,32 +17,72 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    //    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    @GetMapping(value = "")
-    @JsonView(User.UserSimpleView.class)
-    public User query(User user) {
-        System.out.println(user.toString());
+//    @GetMapping(value = "/{id:\\d+}")
+//    @JsonView(User.UserSimpleView.class)
+//    public User queryUserInfo(@PathVariable(name = "id", required = false) String idxxx) {
+//        User user = new User();
+//        user.setUsername(idxxx);
+//        user.setPassword("132145");
+////        System.out.println(user.toString());
+//        return user;
+//    }
+
+//    @RequestMapping(value = "/user", method = RequestMethod.GET)
+//    public List<User> query() {
 //        List<User> users = new ArrayList<>();
-//        users.add(new User("张三", "123"));
-//        users.add(new User("李四", "456"));
-//        users.add(new User("王五", "789"));
+//        users.add(new User());
+//        users.add(new User());
+//        users.add(new User());
+//        return users;
+//    }
 //
-//        for (User user : users) {
-//            if (user.getUsername().equals(username)) {
-//                return user;
-//            }
+//    @RequestMapping(value = "/user", method = RequestMethod.GET)
+//    public User queryByUsername(@RequestParam(name = "username", required = false, defaultValue = "tom") String nickname) {
+//        User user = new User();
+//        user.setUsername(nickname);
+//        return user;
+//    }
+
+//    @RequestMapping(value = "/user", method = RequestMethod.GET)
+//    public UserQueryCondition queryByObj(UserQueryCondition userQueryCondition) {
+//        System.out.println(userQueryCondition);
+//        return userQueryCondition;
+//    }
+
+//    @RequestMapping(value = "/user", method = RequestMethod.GET)
+//    public UserQueryCondition queryByObj(UserQueryCondition userQueryCondition, Pageable pageable) {
+//
+//        System.out.println(userQueryCondition);
+//
+//        System.out.println(pageable.toString());
+//
+//        return userQueryCondition;
+//    }
+//
+//    @PostMapping
+//    @JsonView(User.UserDetailView.class)
+//    public User createUser(@Valid @RequestBody User user, BindingResult errors) {
+//        if (errors.hasErrors()) {
+//            errors.getAllErrors().stream().forEach(error -> System.out.println(error));
 //        }
-        return user;
-    }
+//        System.out.println(errors.hasErrors());
+//        System.out.println(user.getBirthday());
+//        return user;
+//    }
 
-    @GetMapping(value = "/{id:\\d+}")
-    //@PathVariable:从url地址中获取参数值
+    @PutMapping("/{username}")
     @JsonView(User.UserDetailView.class)
-    public User getInfo(@PathVariable(name = "id") String id) {
-        User user = new User();
-        user.setUsername("tom");
+    public User updateUser(@Valid @RequestBody User user, BindingResult errors) {
+        if (errors.hasErrors()) {
+            errors.getAllErrors().stream().forEach(error -> {
+//                FieldError fieldError = (FieldError) error;
+//                String message = fieldError.getField()+"====="+error.getDefaultMessage();
+                System.out.println(error.getDefaultMessage());
+            });
+        }
+        System.out.println(errors.hasErrors());
+        System.out.println(user.toString());
         return user;
     }
-
 
 }

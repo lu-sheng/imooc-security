@@ -1,6 +1,10 @@
 package com.imooc.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Past;
+import java.util.Date;
 
 /**
  * LN
@@ -10,12 +14,28 @@ public class User {
     public interface UserSimpleView {
     }
 
+    ;
+
     public interface UserDetailView extends UserSimpleView {
     }
 
+    ;
 
     private String username;
+
+    @NotBlank   //做不为空的校验
     private String password;
+    @Past(message = "生日必须是过去的时间")
+    private Date birthday;
+
+    @JsonView(UserSimpleView.class)
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     public User() {
     }
@@ -31,10 +51,11 @@ public class User {
     }
 
     public void setUsername(String username) {
+
         this.username = username;
     }
 
-    @JsonView(UserSimpleView.class)
+    @JsonView(UserDetailView.class)
     public String getPassword() {
         return password;
     }
@@ -48,6 +69,7 @@ public class User {
         return "User{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", birthday=" + birthday +
                 '}';
     }
 }
