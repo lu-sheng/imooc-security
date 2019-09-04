@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -13,6 +14,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -121,7 +124,32 @@ public class UserControllerTest {
         System.out.println(contentAsString);
     }
 
+    /**
+     * 模拟查询成功的测试用例
+     */
+    @Test
+    public void testDeleteSuccess() throws Exception {
+        String contentAsString = mockMvc.perform(MockMvcRequestBuilders.delete("/user/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn().getResponse().getContentAsString();
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3));
+        System.out.println(contentAsString);
+    }
 
+    /**
+     * 模拟文件上传的请求
+     */
+    @Test
+    public void whenUploadSuccess() throws Exception {
+        String file = mockMvc.perform(MockMvcRequestBuilders.fileUpload("/file")
+                .file(new MockMultipartFile("file", "test.txt",
+                        "multipart/form-data", "hello upload".getBytes(StandardCharsets.UTF_8))))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(file);
+
+    }
 
 
 }
