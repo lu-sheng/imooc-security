@@ -2,6 +2,7 @@ package com.imooc.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.imooc.validator.MyConstraint;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Past;
@@ -22,11 +23,14 @@ public class User {
 
     ;
     @MyConstraint(message = "这是一个测试")
+    @ApiModelProperty(value = "用户名")
     private String username;
 
     @NotBlank   //做不为空的校验
+    @ApiModelProperty(value = "密码")
     private String password;
     @Past(message = "生日必须是过去的时间")
+    @ApiModelProperty(value = "生日")
     private Date birthday;
 
     @JsonView(UserSimpleView.class)
