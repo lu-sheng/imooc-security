@@ -1,0 +1,6 @@
+##提交时忽略以下文件##
+/imooc-security-app/target
+/imooc-security-browser/target
+/imooc-security-core/target
+/imooc-security-demo/target
+.idea
