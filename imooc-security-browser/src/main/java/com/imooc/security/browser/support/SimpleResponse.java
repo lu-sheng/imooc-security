@@ -1,6 +1,6 @@
 package com.imooc.security.browser.support;
 
-/**
+/**自定义的一个服务返回对象
  * LN
  * 2019/9/19 0019 15:07
  */

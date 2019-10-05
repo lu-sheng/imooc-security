@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
@@ -24,6 +25,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {  //做
 
     @Autowired
     private AuthenticationSuccessHandler imoocAuthenticationSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler imoocAuthenticationFailureHandler;
 
     //密码加密方法
     //PasswordEncoder是个接口，可以自定义类实现这个接口，
@@ -41,6 +45,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {  //做
                 .loginPage("/authentication/require")//跳转到这个服务或者页面
                 .loginProcessingUrl("/authentication/form")//接受发送过来的表单请求地址
                 .successHandler(imoocAuthenticationSuccessHandler)//登录成功后，用我们自己的成功处理器进行处理
+                .failureHandler(imoocAuthenticationFailureHandler)
                 .and()  //权限配置
                 .authorizeRequests()//对请求做一个授权
                 .antMatchers("/authentication/require",

@@ -6,10 +6,11 @@ import com.imooc.security.core.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
@@ -19,29 +20,30 @@ import java.io.IOException;
 
 /**
  * LN
- * 2019/9/19 0019 18:15
+ * 2019/9/26 0026 18:50
  */
-@Component("imoocAuthenticationSuccessHandler")
-public class ImoocAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+@Component("imoocAuthenticationFailureHandler")
+public class ImoocAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private SecurityProperties securityProperties;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        logger.info("登录成功");
-
+    public void onAuthenticationFailure(HttpServletRequest httpServletRequest,
+                                        HttpServletResponse httpServletResponse,
+                                        AuthenticationException e) throws IOException, ServletException {
+        logger.info("登录失败");
         if (LoginType.JSON.equals(securityProperties.getBrowserProperties().getLoginType())) {
+            //设置返回的信息
+            httpServletResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             httpServletResponse.setContentType("application/json;charset=UTF-8");
-            //写回到响应中
-            httpServletResponse.getWriter().write(objectMapper.writeValueAsString(authentication));
+            httpServletResponse.getWriter().write(objectMapper.writeValueAsString(e));
         } else {
-            super.onAuthenticationSuccess(httpServletRequest, httpServletResponse, authentication);
-        }
+            super.onAuthenticationFailure(httpServletRequest, httpServletResponse, e);
 
+        }
     }
 }

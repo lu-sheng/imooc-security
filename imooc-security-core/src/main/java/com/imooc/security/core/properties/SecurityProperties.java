@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * LN
  * 2019/9/19 0019 16:19
  */
-@Component
+
 @ConfigurationProperties(prefix = "imooc.security")
 public class SecurityProperties {
     /*

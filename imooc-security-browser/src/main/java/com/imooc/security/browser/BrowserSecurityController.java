@@ -43,13 +43,14 @@ public class BrowserSecurityController {
      * @return
      */
     @RequestMapping("/authentication/require")
-    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)//返回未授权的状态码
     public SimpleResponse requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         if (savedRequest != null) {
             String targetUrl = savedRequest.getRedirectUrl();
             logger.info("引发跳转的请求是：" + targetUrl);
             if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
+                //如果是.html结尾，调转到登录页上
                 redirectStrategy.sendRedirect(request, response, securityProperties.getBrowserProperties().getLoginPage());
             }
         }
