@@ -1,5 +1,6 @@
 package com.imooc.security.core.properties;
 
+import com.imooc.security.core.validate.code.ValidateCodeFilter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,16 @@ public class SecurityProperties {
     这里的实例对象名应该和配置文件中的一样
      */
     private BrowserProperties browser = new BrowserProperties();
+
+    private ValidateCodeProperties code = new ValidateCodeProperties();
+
+    public ValidateCodeProperties getCode() {
+        return code;
+    }
+
+    public void setCode(ValidateCodeProperties code) {
+        this.code = code;
+    }
 
     public BrowserProperties getBrowserProperties() {
         return browser;

@@ -2,6 +2,7 @@ package com.imooc.security.browser;
 
 import com.imooc.security.browser.authentication.ImoocAuthenticationSuccessHandler;
 import com.imooc.security.core.properties.SecurityProperties;
+import com.imooc.security.core.validate.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * LN
@@ -39,9 +41,12 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {  //做
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+        validateCodeFilter.setAuthenticationFailureHandler(imoocAuthenticationFailureHandler);
         //表单登录的配置
 //        httpSecurity.httpBasic()//代表httpBasic方式登录
-        httpSecurity.formLogin()  //代表表单方式登录
+        httpSecurity.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin()  //代表表单方式登录
                 .loginPage("/authentication/require")//跳转到这个服务或者页面
                 .loginProcessingUrl("/authentication/form")//接受发送过来的表单请求地址
                 .successHandler(imoocAuthenticationSuccessHandler)//登录成功后，用我们自己的成功处理器进行处理
@@ -49,7 +54,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {  //做
                 .and()  //权限配置
                 .authorizeRequests()//对请求做一个授权
                 .antMatchers("/authentication/require",
-                        securityProperties.getBrowserProperties().getLoginPage()).permitAll() //设置登录页不需要授权认证
+                        securityProperties.getBrowserProperties().getLoginPage(),
+                        "/code/image").permitAll() //设置登录页不需要授权认证
                 .anyRequest()//任何请求
                 .authenticated()//都需要做身份认证
                 .and()
