@@ -21,6 +21,24 @@ public class SecurityProperties {
 
     private ValidateCodeProperties code = new ValidateCodeProperties();
 
+    private SocialProperties socialProperties = new SocialProperties();
+
+    public BrowserProperties getBrowser() {
+        return browser;
+    }
+
+    public void setBrowser(BrowserProperties browser) {
+        this.browser = browser;
+    }
+
+    public SocialProperties getSocialProperties() {
+        return socialProperties;
+    }
+
+    public void setSocialProperties(SocialProperties socialProperties) {
+        this.socialProperties = socialProperties;
+    }
+
     public ValidateCodeProperties getCode() {
         return code;
     }

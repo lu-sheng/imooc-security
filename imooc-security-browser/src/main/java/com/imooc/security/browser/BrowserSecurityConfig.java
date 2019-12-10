@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 /**
  * LN
@@ -31,6 +32,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {  //做
     @Autowired
     private AuthenticationFailureHandler imoocAuthenticationFailureHandler;
 
+    @Autowired
+    private SpringSocialConfigurer imoocSpringSocialConfig;
+
     //密码加密方法
     //PasswordEncoder是个接口，可以自定义类实现这个接口，
     // 来实现我们自己的加密逻辑
@@ -46,6 +50,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {  //做
         //表单登录的配置
 //        httpSecurity.httpBasic()//代表httpBasic方式登录
         httpSecurity.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                .apply(imoocSpringSocialConfig)
+                .and()
                 .formLogin()  //代表表单方式登录
                 .loginPage("/authentication/require")//跳转到这个服务或者页面
                 .loginProcessingUrl("/authentication/form")//接受发送过来的表单请求地址
